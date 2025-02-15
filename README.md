@@ -37,13 +37,6 @@ This is a Flask-based chat application that provides functionalities such as man
     pip install -r requirements.txt
     ```
 
-    If you don't have a `requirements.txt` file, you can manually install Flask and other dependencies:
-
-    ```sh
-    pip install Flask
-    pip install werkzeug
-    ```
-
 4. **Save the environment configuration:**
 
     ```sh
