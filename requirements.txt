@@ -1,0 +1,11 @@
+flask
+werkzeug
+uuid
+json
+logging
+langchain_community
+langchain_huggingface
+sentence-transformers
+pypdf
+faiss-cpu
+faiss-gpu
