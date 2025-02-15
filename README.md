@@ -1,3 +1,7 @@
+Got it! Here's the updated README file with the demo section placed right after the features:
+
+---
+
 # RAG-Chatbot
 
 This is a Flask-based chat application that provides functionalities such as managing chat sessions, handling PDF uploads, processing documents, selecting models for generating responses, and retrieving chat history.
@@ -9,6 +13,9 @@ This is a Flask-based chat application that provides functionalities such as man
 - Manage model selection and response generation
 - Retrieve chat history
 - Debugging endpoints for system state and document information
+
+## Demo
+
 
 ## Setup
 
@@ -62,6 +69,26 @@ This is a Flask-based chat application that provides functionalities such as man
     ```sh
     http://127.0.0.1:5000/
     ```
+
+## Note to the Viewer
+
+To use the RAG-Chatbot application, please follow these steps:
+
+1. **Download the Model:**
+   Download the required model from the provided Google Drive link. Make sure to save the downloaded model file in the `models` folder of the project.
+
+2. **Set Up the Environment:**
+   Follow the steps in the "Setting Up the Environment" section of this README file to create and activate a Conda environment, and install the necessary dependencies.
+
+3. **Run the Application:**
+   Once the environment is set up, run the `app.py` file to start the Flask application:
+
+    ```sh
+    python app.py
+    ```
+
+4. **Chat with Your Documents:**
+   Open your web browser and go to `http://127.0.0.1:5000/`. You can upload your documents via the GUI and start chatting with the chatbot.
 
 ## API Endpoints
 
@@ -144,3 +171,7 @@ This is a Flask-based chat application that provides functionalities such as man
 ├── requirements.txt
 └── environment.yml
 ```
+
+## License
+
+This project is licensed under the MIT License.
