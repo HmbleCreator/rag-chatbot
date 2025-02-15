@@ -1,0 +1,21 @@
+Metadata-Version: 2.2
+Name: rag_chatbot
+Version: 0.1.0
+Summary: A RAG chatbot using GGUF models and PDF documents
+Author: Your Name
+Author-email: your.email@example.com
+Keywords: rag,chatbot,llm,pdf
+Requires-Python: >=3.8
+Requires-Dist: flask>=2.0.0
+Requires-Dist: llama-cpp-python>=0.2.0
+Requires-Dist: langchain>=0.1.0
+Requires-Dist: pypdf>=3.0.0
+Requires-Dist: faiss-cpu>=1.7.0
+Requires-Dist: sentence-transformers>=2.0.0
+Requires-Dist: python-dotenv>=0.19.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .container {
+            display: flex;
+            height: 85vh;
+        }
+
+        .left-section {
+            width: 45%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-section {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .chat-controls {
+            margin-bottom: 20px;
+        }
+        
+        .new-chat-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .new-chat-btn:hover {
+            background: #45a049;
+        }
+
+        .upload-section {
+            width: 80%;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-drop-zone.dragover {
+            border-color: #4CAF50;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid #033907;
+            height: calc(85vh - 40px); /* Adjust height */
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .chat-messages {
+            flex: 2;
+            padding: 10px;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 300px; /* Ensure there's enough space for scrolling */
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .input-section input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-section button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-section button:hover {
+            background: #45a049;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            max-width: 60%;
+            display: inline-block;
+        }
+
+        .user-message {
+            background: #eddea1;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background: #e1f3e1;
+            align-self: flex-start;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="upload-section">
+                <h2>Upload PDF Documents</h2>
+                <div class="file-drop-zone" id="dropZone" onclick="triggerFileInput()">
+                    <p>Drag and drop PDF files here or click to select</p>
+                    <input type="file" id="fileInput" accept=".pdf" multiple style="display: none;">
+                </div>
+                <div id="uploadError" class="error" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="chat-controls">
+                <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
+                <select id="modelSelect" onchange="selectModel()">
+                    <option value="">Select Model</option>
+                    {% for model in available_models %}
+                        <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="input-section">
+                    <input type="text" id="userInput" placeholder="Type your question here...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+            <div class="loading" id="loading">Processing...</div>
+        </div>
+    </div>
+
+    <script>
+        let chatId = "{{ chat_id }}";
+        let modelPath = "";
+    
+        function triggerFileInput() {
+            document.getElementById('fileInput').click();
+        }
+    
+        document.getElementById('fileInput').addEventListener('change', handleFiles);
+    
+        async function handleFiles() {
+            const files = document.getElementById('fileInput').files;
+            if (files.length > 0) {
+                try {
+                    const formData = new FormData();
+                    Array.from(files).forEach(file => formData.append('pdf', file));
+    
+                    const response = await fetch('/upload-pdf', {
+                        method: 'POST',
+                        body: formData
+                    });
+    
+                    const result = await response.json();
+                    if (response.ok) {
+                        result.files.forEach(file => addMessage(`${file} uploaded successfully`, 'bot'));
+                        console.log('Files uploaded successfully');
+                    } else {
+                        console.error('Error uploading files:', result.error);
+                        document.getElementById('uploadError').textContent = result.error;
+                        document.getElementById('uploadError').style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error uploading files:', error);
+                    document.getElementById('uploadError').textContent = error.message;
+                    document.getElementById('uploadError').style.display = 'block';
+                }
+            }
+        }
+    
+        async function startNewChat() {
+            try {
+                const response = await fetch('/new-chat', { method: 'POST' });
+                const data = await response.json();
+                chatId = data.chat_id;
+                // Clear chat messages
+                document.getElementById('chatMessages').innerHTML = '';
+                addMessage('Hello! How can I help you today?', 'bot');
+            } catch (error) {
+                console.error('Error starting new chat:', error);
+            }
+        }
+    
+        async function selectModel() {
+            const modelFilename = document.getElementById('modelSelect').value;
+            if (modelFilename) {
+                try {
+                    const response = await fetch('/select-model', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ model_filename: modelFilename })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        modelPath = data.model_path;
+                        console.log(`Model selected: ${modelPath}`);
+                    } else {
+                        console.error('Error selecting model:', data.error);
+                    }
+                } catch (error) {
+                    console.error('Error selecting model:', error);
+                }
+            }
+        }
+    
+        async function sendMessage() {
+            const message = document.getElementById('userInput').value.trim();
+            if (!message || !modelPath) return;
+    
+            addMessage(message, 'user');
+            document.getElementById('userInput').value = '';
+    
+            try {
+                document.getElementById('loading').style.display = 'block';
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: message, chat_id: chatId, model_path: modelPath })
+                });
+    
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error);
+    
+                addMessage(result.response, 'bot');
+            } catch (error) {
+                addMessage('Error: ' + error.message, 'bot');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = text;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.appendChild(messageDiv);
+            
+            // Ensure scroll to bottom after the message is rendered
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 0);
+        }
+    
+        // Handle Enter and Shift+Enter for message input
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent default Enter behavior
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
