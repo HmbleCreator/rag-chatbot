@@ -44,12 +44,6 @@ This is a Flask-based chat application that provides functionalities such as man
     pip install -r requirements.txt
     ```
 
-4. **Save the environment configuration:**
-
-    ```sh
-    conda env export > environment.yml
-    ```
-
 ### Running the Application
 
 1. **Navigate to the project directory:**
