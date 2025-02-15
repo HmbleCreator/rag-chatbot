@@ -12,6 +12,7 @@ This is a Flask-based chat application that provides functionalities such as man
 
 ## Demo
 
+[![Watch the video](https://img.youtube.com/vi/1AWcTMlDe_4/0.jpg)](https://www.youtube.com/watch?v=1AWcTMlDe_4)
 
 ## Setup
 
