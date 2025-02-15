@@ -1,7 +1,3 @@
-Got it! Here's the updated README file with the demo section placed right after the features:
-
----
-
 # RAG-Chatbot
 
 This is a Flask-based chat application that provides functionalities such as managing chat sessions, handling PDF uploads, processing documents, selecting models for generating responses, and retrieving chat history.
