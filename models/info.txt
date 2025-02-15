@@ -1,0 +1,6 @@
+Put your ".gguf" model here in this same directory as this text file(C:\Users\amiku\rag-chatbot\models).
+2. Run the following command in your terminal or command prompt:
+* conda create -n flask_env python=3.8
+* conda activate flask_env
+* pip install -r requirements.txt
+* python app.py
