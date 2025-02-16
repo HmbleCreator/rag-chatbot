@@ -1,7 +1,3 @@
-Here's the updated **README** file with the changes for easy integration of any GGUF model and renaming it to match the default configuration:
-
----
-
 # RAG-Chatbot
 
 This is a Flask-based chat application that provides functionalities such as managing chat sessions, handling PDF uploads, processing documents, selecting models for generating responses, and retrieving chat history.
@@ -82,17 +78,61 @@ To use the RAG-Chatbot application, please follow these steps:
 
    For example, if you download a model named `my-gguf-model`, rename it to `mistral-7b` (or another model name from the list). Save it in the `models/` directory.
 
-3. **Set Up the Environment:**
+3. **(OR Alternatively)Update the DEFAULT_CONFIG (if needed):**
+   The `DEFAULT_CONFIG` dictionary in the project has predefined model names, such as `mistral-7b`, `llama-2`, and others. When you rename the model to one of these default names, it will automatically match the configuration settings for that model.
+
+   You can also update the configuration settings directly in the `model_config.py` file to suit your specific model.
+
+   Here's an example of the `DEFAULT_CONFIG` dictionary:
+
+   ```python
+   DEFAULT_CONFIG = {
+       'mistral-7b': {
+           'n_ctx': 4096,
+           'n_threads': os.cpu_count(),
+           'n_gpu_layers': 0,
+           'template': "System: You are a helpful assistant.\n\nUser: {query}\n\nAssistant:"
+       },
+       'llama-2': {
+           'n_ctx': 4096,
+           'n_threads': os.cpu_count(),
+           'n_gpu_layers': 0,
+           'template': "<s>[INST] {query} [/INST]"
+       },
+       'neural-chat': {
+           'n_ctx': 4096,
+           'n_threads': os.cpu_count(),
+           'n_gpu_layers': 0,
+           'template': "### System: You are a helpful assistant.\n\n### User: {query}\n\n### Assistant:"
+       },
+       'mistral-nemo-instruct-2407-gguf': {
+           'n_ctx': 4096,
+           'n_threads': os.cpu_count(),
+           'n_gpu_layers': 0,
+           'template': "System: You are a helpful assistant.\n\nUser: {query}\n\nAssistant:"
+       },
+       'model': {
+           'n_ctx': 4096,
+           'n_threads': os.cpu_count(),
+           'n_gpu_layers': 0,
+           'template': "System: You are a helpful assistant.\n\nUser: {query}\n\nAssistant:"
+       }
+   }
+   ```
+
+   **Alternatively**, you can update the configurations directly in the `model_config.py` file.
+
+4. **Set Up the Environment:**
    Follow the steps in the "Setting Up the Environment" section of this README file to create and activate a Conda environment, and install the necessary dependencies.
 
-4. **Run the Application:**
+5. **Run the Application:**
    Once the environment is set up, run the `app.py` file to start the Flask application:
 
     ```sh
     python app.py
     ```
 
-5. **Chat with Your Documents:**
+6. **Chat with Your Documents:**
    Open your web browser and go to `http://127.0.0.1:5000/`. You can upload your documents via the GUI and start chatting with the chatbot.
 
 ## API Endpoints
