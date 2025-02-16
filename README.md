@@ -1,3 +1,7 @@
+Here's the updated **README** file with the changes for easy integration of any GGUF model and renaming it to match the default configuration:
+
+---
+
 # RAG-Chatbot
 
 This is a Flask-based chat application that provides functionalities such as managing chat sessions, handling PDF uploads, processing documents, selecting models for generating responses, and retrieving chat history.
@@ -68,17 +72,27 @@ To use the RAG-Chatbot application, please follow these steps:
 1. **Download the Model:**
    Download the required model from the provided Google Drive link. Make sure to save the downloaded model file in the `models` folder of the project.
 
-2. **Set Up the Environment:**
+2. **Rename and Set Up the Model:**
+   After downloading the GGUF model, rename it to match one of the default names from the following list to ensure compatibility with the application:
+   - `mistral-7b`
+   - `llama-2`
+   - `neural-chat`
+   - `mistral-nemo-instruct-2407-gguf`
+   - `model`
+
+   For example, if you download a model named `my-gguf-model`, rename it to `mistral-7b` (or another model name from the list). Save it in the `models/` directory.
+
+3. **Set Up the Environment:**
    Follow the steps in the "Setting Up the Environment" section of this README file to create and activate a Conda environment, and install the necessary dependencies.
 
-3. **Run the Application:**
+4. **Run the Application:**
    Once the environment is set up, run the `app.py` file to start the Flask application:
 
     ```sh
     python app.py
     ```
 
-4. **Chat with Your Documents:**
+5. **Chat with Your Documents:**
    Open your web browser and go to `http://127.0.0.1:5000/`. You can upload your documents via the GUI and start chatting with the chatbot.
 
 ## API Endpoints
